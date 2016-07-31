@@ -11,6 +11,7 @@ __version__ = '0.0.1'
 __author__ = 'Yegorov <yegorov0725@yandex.ru>'
 
 import sys
+import os
 import requests
 import json
 import re
@@ -34,14 +35,21 @@ def get_json(url, referer):
 
 def get_file_name(name, ext="json"):
     return "{}_{}.{}".format(name, datetime.datetime.now().strftime("%Y-%m-%d"), ext)
+
+def create_dir(dir_path):
+    if not os.path.exists(dir_path):
+        print("Create folder:", dir_path)
+        os.mkdir(dir_path)
     
 def read_json(file_name, prefix="./data/"):
     d = None
+    create_dir(prefix)
     with open(prefix + file_name, 'r', encoding='utf-8') as fp:
         d = json.load(fp)
     return d
 
 def write_json(file_name, d, prefix="./data/"):
+    create_dir(prefix)
     with open(prefix + file_name, 'w', encoding='utf-8') as fp:
         fp.write(json.dumps(d, ensure_ascii=False, indent=2))
     
